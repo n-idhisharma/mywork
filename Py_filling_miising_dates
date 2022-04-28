@@ -1,0 +1,13 @@
+import pandas as pd
+
+#fill missing dates in dataframe and return dataframe object
+def fill_in_missing_dates(df, date_col_name = 'date',fill_val = np.nan,date_format='%Y-%m-%d'):
+  df.set_index(date_col_name,drop=True,inplace=True)
+  df.index = pd.to_datetime(df.index, format = date_format)
+  idx = pd.date_range(df.index.min(), df.index.max())
+  print('missing_dates are',idx.difference(df.index))
+  df=df.reindex(idx,fill_value=fill_val)
+  print('missing_dates after fill',idx.difference(df.index))
+  df[date_col_name] = df.index
+  df.reset_index(drop=True,inplace=True)
+  return df
